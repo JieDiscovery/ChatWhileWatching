@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- This template is for creating an Internet Draft using xml2rfc,
+     which is available here: http://xml.resource.org. -->
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!-- One method to get references from the online citation libraries.
+     There has to be one entity for each item to be referenced.
+     An alternate method (rfc include) is described in the references. -->
+
+<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+]>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- do not display copyright and other IETF-related stuff -->
+<?rfc private="Protocol Specification" ?>
+
+<!-- end of list of popular I-D processing instructions -->
+<rfc category="info" docName="ChatWhileWatching-text" ipr="trust200902">
+  <!-- category values: std, bcp, info, exp, and historic
+     ipr values: full3667, noModification3667, noDerivatives3667
+     you can add the attributes updates="NNNN" and obsoletes="NNNN"
+     they will automatically be output with "(if approved)" -->
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
+         full title is longer than 39 characters -->
+
+    <title abbrev="ChatWhileWatching TEXT Protocol">Protocol Specification:
+    ChatWhileWatching (Text Version)</title>
+
+    <!-- add 'role="editor"' below for the editors if appropriate -->
+
+
+
+    <author fullname="Jie SONG, Chaochen MA" 
+            surname="Jie SONG, Chaochen MA">
+      <organization>IMT Atlantique</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <!-- Reorder these if your country does things differently -->
+
+          <city>Brest</city>
+
+          <region>Bretagne</region>
+
+          <code>29280</code>
+
+          <country>France</country>
+        </postal>
+
+        <phone>+33 06 50 07 86 34</phone>
+
+        <email>jie.song@imt-atlantique.net;
+        chaochen.ma@imt-atlantique.net</email>
+
+        <!-- uri and facsimile elements may also be added -->
+      </address>
+    </author>
+
+    <date month="Sep" year="2017" />
+
+    <!-- If the month and year are both specified and are the current ones, xml2rfc will fill
+         in the current day for you. If only the current year is specified, xml2rfc will fill
+	 in the current day and month for you. If the year is not the current one, it is
+	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the
+	 purpose of calculating the expiry date).  With drafts it is normally sufficient to
+	 specify just the year. -->
+
+
+
+    <keyword>Protocol Specification for "ChatWhileWatching"</keyword>
+
+    <!-- Keywords will be incorporated into HTML output
+         files in a meta tag but they have no effect on text or nroff
+         output. If you submit your draft to the RFC Editor, the
+         keywords will be used for the search engine. -->
+
+    <abstract>
+      <t>This protocol specification for the text version of the
+protocol.  The goal of this protocol is to allow a
+ client to log in 'ChatWhileWatching' to find the film list and the user 
+list saved in the server. It also allows different users to chat in the main interface with movie lists and chat in the interface of MovieRoom.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>'ChatWhileWatching' is an application which allows differents clients to log in, watch the lists of users and movies. 
+      Every client can chat in the main interface and choose a movie then chat in the MovieRoom. All messages sent to the same interface can be seen by others. </t>
+
+      <t>Clients can use either UDP or TCP to exchange messages with the server. While
+       sending a reply, the server MUST use the same layer for protocol used by the client for the corresponding request.
+</t>
+
+
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in  <xref
+        target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+      
+      
+    </section>
+
+    <section title="Message Format">
+
+        <t>For specifying differents kinds of messages, we set various formats of message for reserving useful information. For each kind of format,
+         we put an identifer in the first place to identify them.
+        </t>
+
+       <section title="Scenario 1: while loging in  ">
+    <t>
+		  <figure align="left">
+    <artwork align="left">
+			LOGIN&lt;CRLF&gt;
+			IP&lt;CRLF&gt;
+			PORT&lt;CRLF&gt;
+			USERNAME&lt;CRLF&gt; 
+			
+LOGIN			
+    </artwork>
+    </figure>
+   For requests(i.e., messages sent by a client), this is the identifer to tell that this message is a message of Login. 
+   Defautly, we set the value of LOGIN as 01 to identify a login request. For responses(i.e., messages sent from the serveur to the client),  
+   if this login request is accepted, LOGIN in the message sent from the server will be 11 ;If not, LOGIN will be 10. 
+   </t>
+ </section>
+
+<section title="Scenario 2: Chat Message request  ">
+    <t>
+		  <figure align="left">
+    <artwork align="left">
+			CHAT&lt;CRLF&gt;
+			IP&lt;CRLF&gt;
+			PORT&lt;CRLF&gt;
+			USERNAME&lt;CRLF&gt;	
+			TIME:&lt;space&gt;TEXT&lt;CRLF&gt;
+CHAT			
+    </artwork>
+    </figure>
+CHAT is the identifer to tell that this message is a message of chatting. Defautly, 
+we set the value of CHAT as 02 to identify a chatting request. 
+   </t>
+<t>TIME</t>
+<t>
+For requests(i.e., messages sent by a client), this is the time at which the request was sent, expressed as the number of seconds since Januaey 1st, 1970.For responses(i.e., messages sent from the serveur to the client), TIME field MUST be the same as the TIME field of the corresponding request.
+</t>
+<t>
+In every message the TIME must be followed immediately by a single colon, followed a single white space.
+
+   </t>
+   
+   <t>TEXT  </t>
+<t>
+The text of the question, for requests, and the text of the reply for responses.
+</t>
+
+ </section>
+ <section title="Scenario 3: Chat Message reply in main interface and movie room ">
+    <t>
+		  <figure align="left">
+    <artwork align="left">
+			TRANSFER&lt;CRLF&gt;
+			IPAddressPresentList&lt;CRLF&gt;	
+			TIME:&lt;space&gt;TEXT&lt;CRLF&gt;
+TRANSFER			
+    </artwork>
+    </figure>
+TRANSFER is the identifer to tell that this is a transfer message when a server received a chat message 
+and is going to send this message to the others users who are online. Defautly we set the value of TRANSFER
+as 31 to be a reply in the main interface and 32 to be a reply in the present movie room.
+
+   </t>
+<t>IPAddressPresentList</t>
+<t>
+	When the server contribute a chat message in the main interface, IPAddressPresentList is a list of IP address 
+	which points to the the users who are online when the message is going to be sent.When the server contribute a
+	 chat message in a certain movie room, IPAddressPresentList is a list of IP address which points to the the users who are online 
+	 in this certain movie room when the message is going to be sent.
+
+</t>
+
+ </section>  
+  <section title="Scenario 4: Enter MovieRoom Request/Reply ">
+    
+		  <figure align="left">
+    <artwork align="left"> 
+			MovieRoom&lt;CRLF&gt;
+			IPAddress&lt;CRLF&gt;
+			PortNumber&lt;CRLF&gt;
+			USERNAME&lt;CRLF&gt;
+			MovieName&lt;CRLF&gt;			
+MovieRoom			
+    </artwork>
+    </figure>
+ <t> MovieRoom is the identifer to tell that this message is a message while a client would like to enter the MovieRoom.
+   Defautly, we set the value of MovieRoom as 04 to identify a chatting request. For responses(i.e., messages sent from the serveur to the client), 
+   defautly, we set the value of MovieRoom as 41 to identify an accepted chatting reply and 40 for refusing this chatting reply. 
+</t>
+ 
+ 
+ 
+   
+ </section>
+ 
+  <section title="Scenario 5: List of Clients">
+    
+		  <figure align="left">
+    <artwork align="left"> 
+			ListClient&lt;CRLF&gt;
+			IPAddress&lt;CRLF&gt;
+			PortNumber&lt;CRLF&gt;
+			Username&lt;CRLF&gt;
+			Userstate&lt;CRLF&gt;	
+			RoomNum&lt;CRLF&gt;	
+Userstate			
+    </artwork>
+    </figure>
+ <t> Userstate indique whether a client is online or not. If a client is online, Userstate will be 1, 
+ if it is offline, userstate will be 0. The list of client message
+  will be sent to all the clients online when a client logs in or out.  
+</t>
+ <t> ListClient
+</t>
+  <t>Defautly we set the value of ListClient as 05 to identify a message of reserving users' states. 
+</t>  <t>RoomNum </t>
+ <t>RoomNum stores the number of movie room where the user is on. If the user is just in the main interface, RoomNum=NUll.</t>
+ </section>
+ 
+ <section title="Scenario 6: List of Movies  ">
+	  <t>After log in, a server will receive the list of the names of movies. </t>
+	  
+    <t>
+		  <figure align="left">
+    <artwork align="left">
+			ListMovie&lt;CRLF&gt;
+			IPAddress&lt;CRLF&gt;
+			PORT&lt;CRLF&gt;
+			Username&lt;CRLF&gt;
+			MovieNameList&lt;CRLF&gt; 
+ListMovie		
+
+Defautly, we set the value of ListMovie as 61 to identifer it is a message for sending the list of Movies' name.
+
+MovieNameList
+
+Server MUST reserve the list of movies' name in its local database.
+		
+    </artwork>
+    </figure>
+
+   </t>
+ </section>
+     <section title="Scenario 7: LogOut Message  ">
+    <t>
+		  <figure align="left">
+    <artwork align="left">
+			LOGOUT &lt;CRLF&gt;
+			IP&lt;CRLF&gt;
+			PORT&lt;CRLF&gt;
+			USERNAME&lt;CRLF&gt; 	
+LOGOUT			
+    </artwork>
+    </figure>
+
+For requests(i.e., messages sent by a client), this is the identifer to tell that this message is a message of LogOut. Defautly, we set the value of LOGOUT as 07 to identify a login request.
+ For responses(i;e., messages sent from the serveur to the client),  If this login request is accepted, 
+ LOGOUT in the message sent from the server will be 71;If it is refused, LogOut will be 70.
+</t><t>
+The serveur MUST always reply to a request. Clients MUST send at most one request every second.
+</t>
+    </section> 
+ 
+
+    </section> <!-- End of "message format" section -->
+
+    <section title="Reliability">
+
+    <t>When using UDP, a client MAY resend a request for which it has not yet received a response
+    after a certain time.  In order not to overload servers, clients SHOULD wait at least 2 seconds
+    before resending a request.</t>
+
+
+    </section>
+
+    <section title="Server Configuration and Multiple Servers">
+
+    <t> Each server MUST maintain a local data base mapping names to IP addresses.  If a server
+    does not find a certain name in its local data base, instead of immediately sending a negative
+    response, the server MAY contact one or more other servers, asking if they know the IP address
+    corresponding to the name requested by the client.  Upon receiving a response the server should
+    forward it to the corresponding client.  Note that in this case it is up to the server to resend
+    the request to another server, if it has not received a response after a certain time.
+    </t>
+
+    </section>
+
+    <section title="Examples">
+ <section title="Example 1: while a client logs in ">
+
+    <t>Suppose a client would like to log in the 'chatwhilewatching' application. It should send the following message to the serveur(recall that CR represents the ASCII character "Carriage Return" (13) and LF represents the ASCII character "Line Feed" (10))::
+    </t>
+
+    <figure align="left">
+    <artwork align="left">
+		01CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+    </artwork>
+    </figure>
+
+    <t> If the username is correspondent to the ip address, the server MUST respond with the following message:</t>
+    <figure align="left">
+    <artwork align="left">
+		11CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+    </artwork>
+    </figure>
+
+    <t>If, instead, the requested name does not exist, the server MUST respond with the
+    following message: </t>
+
+    <figure align="left">
+    <artwork align="left">
+		10CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+
+    </artwork>
+    </figure>
+
+ </section>
+ 
+ 
+  <section title="Example 2: Exchange chatting messages">
+
+    <t>At 3.35 pm on March 3rd, 2010, a client sends the following message in the dialog box or movieRoom:"Hey, anybody online?"
+   
+    </t>
+
+    <figure align="left">
+    <artwork align="left">
+		02CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		1267626900: Hey, anybody online?CRLF
+    </artwork>
+    </figure>
+
+<t>The server will transfer this message to its list of ip adresses with this format:</t>
+
+    <figure align="left">
+    <artwork align="left">
+	    31CRLF
+	    192.168.1.1;192.168.2.1;192.168.2.3;CRLF	    
+	    1267626900: Hey, anybody online?CRLF
+    </artwork>
+    </figure>
+ </section>
+
+ <section title="Example 3: while a client would like to enter a MovieRoom ">
+
+    <t>Suppose a client would like to enter a certain movie room which plays a movie "FINALWORLD" . It should send the following message to the serveur(recall that CR represents the ASCII character "Carriage Return" (13) and LF represents the ASCII character "Line Feed" (10))::
+    </t>
+
+    <figure align="left">
+    <artwork align="left">
+		04CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		FINALWORLDCRLF
+    </artwork>
+    </figure>
+
+    <t> If it is accepted, the server MUST respond with the following message:</t>
+    <figure align="left">
+    <artwork align="left">
+		41CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		FINALWORLDCRLF
+    </artwork>
+    </figure>
+
+    <t>If, instead,  the server MUST respond with the
+    following message: </t>
+
+    <figure align="left">
+    <artwork align="left">
+		40CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		FINALWORLDCRLF
+    </artwork>
+    </figure>
+
+ </section> 
+<section title="Example 4: While a client logs in and a server reserves the list of client ">
+
+    <t>Once a client has logged in the main interface, the server will receive it and add to the 
+    list of users. For exemple, user David has logged in:</t>
+    <figure align="left">
+    <artwork align="left">
+		05CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		1CRLF
+		NULLCRLF
+    </artwork>
+    </figure>
+      <t>Once a client has logged out this application, the server will refresh ist of users.
+       For exemple, user alerto has loged out this application:</t>
+    <figure align="left">
+    <artwork align="left">
+		05CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		0CRLF
+		NULLCRLF
+    </artwork>
+    </figure>
+      <t>Once a client has logged in a certain movie room, the server will receive it and add to the list of users in this room.
+       For exemple, user David has entered in the movie room whose number is 32:</t>
+    <figure align="left">
+    <artwork align="left">
+		05CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		1CRLF
+		32CRLF
+    </artwork>
+    </figure>
+     <t>Once a client has logged out a certain movie room, the server will refresh ist of users in this room.
+       For exemple, user alerto has loged out of the movie room whose number is 32:</t>
+    <figure align="left">
+    <artwork align="left">
+		05CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		0CRLF
+		32CRLF
+    </artwork>
+    </figure>
+
+   
+ </section>
+ <section title="Example 5: While a server sends the list of movies ">
+
+    <t>Once a client has logged in, it will receive a list of movies. For exemple, Titanic is in the list:</t>
+    <figure align="left">
+    <artwork align="left">
+		06CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+		FINALWORLD;SPIDERMANCRLF
+    </artwork>
+    </figure>
+
+   
+ </section>
+  <section title="Example 6: While a client wants to log out ">
+
+    <t>We suppose that a client will log out,it will send the log out 
+    message to the server, and the server will transfer its state. 
+    The message by a client  SHOULD like :</t>
+     <figure align="left">
+    <artwork align="left">
+		07CRLF
+		192.168.1.1CRLF
+		2333CRLF
+		albertoCRLF
+    </artwork>
+    </figure>
+    
+</section> 
+ </section>
+ </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <!-- References split into informative and normative -->
+
+    <!-- There are 2 ways to insert reference entries from the citation libraries:
+     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+
+     Both are cited textually in the same manner: by using xref elements.
+     If you use the PI option, xml2rfc will, by default, try to find included files in the same
+     directory as the including file. You can also define the XML_LIBRARY environment variable
+     with a value containing a set of directories to search.  These can be either in the local
+     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+
+    <references title="Normative References">
+        <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+        &RFC2119;
+    </references>
+
+
+
+    <!-- Change Log
+
+v00 2013-06-26  AB   Initial version
+-->
+  </back>
+</rfc>
