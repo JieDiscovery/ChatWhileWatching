@@ -1,0 +1,188 @@
+Protocol Specification
+
+
+Abstract: 
+This protocol specification for the text version of the
+protocol.  The goal of this protocol is to allow a
+ client to log in 'ChatWhileWatching' to find the film list and the user 
+list saved in the server. It also allows different users to chat in the main interface with movie lists and chat in the interface of MovieRoom.
+
+
+1.  Introduction
+'ChatWhileWatching' is an application which allows differents clients to log in, watch the lists of users and movies. Every client can chat in the main interface and choose a movie then chat in the MovieRoom. All messages sent to the same interface can be seen by others. 
+      
+Clients can use either UDP or TCP to exchange messages with the server. When sending a reply, the server MUST use the same layer for protocol used by the client for the corresponding request.
+
+1.1.  Requirements Language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in RFC 2119 [RFC2119].
+
+2.  Message Format
+
+For specifying differents kinds of messages, we set various formats of message for reserving useful information. For each kind of format, we put an identifer in the first place to identify them.
+
+2.1 Login Message: 
+ 	
+			LOGIN <CRLF>
+			IP <CRLF>
+			PORT <CRLF>
+            	    	USERNAME <CRLF>
+
+LOGIN
+
+For requests(i.e., messages sent by a client), this is the identifer to tell that this message is a message of Login. Defautly, we set the value of LOGIN as 01 to identify a login request. For responses(i.e., messages sent from the serveur to the client),  If this login request is accepted, LOGIN in the message sent from the server will be 11 ;If not, LOGIN will be 10.
+
+
+2.2 Chat Message request:	
+			CHAT <CRLF>
+			IP Address <CRLF>
+			Port Number <CRLF>
+            	    	Username <CRLF>
+			TIME:<space> TEXT <CRLF>
+CHAT
+
+CHAT is the identifer to tell that this message is a message of chatting. Defautly, we set the value of CHAT as 02 to identify a chatting request. For responses(i;e., messages sent from the serveur to the client). 
+
+TIME
+
+For requests(i.e., messages sent by a client), this is the time at which the request was sent, expressed as the number of seconds since Januaey 1st, 1970.For responses(i.e., messages sent from the serveur to the client), TIME field MUST be the same as the TIME field of the corresponding request.
+
+In every message the TIME must be followed immediately by a single colon, followed a single white space.
+
+TEXT  
+
+The text of the question, for requests, and the text of the reply for responses.
+
+
+2.3 Chat Message reply in main interface and movie room:
+                        TRANSFER <CRLF>
+			IPAddressPresentList <CRLF>
+			TIME:<space> TEXT <CRLF>
+
+
+TRANSFER
+
+TRANSFER is the identifer to tell that this is a transfer message when a server received a chat message and is going to send this message to the others users who are online. Defautly we set the value of TRANSFER as 31 to be a reply in the main interface and 32 to be a reply in the present movie room.
+
+IPAddressPresentList
+
+When the server contribute a chat message in the main interface, IPAddressPresentList is a list of IP address which points to the the users who are online when the message is going to be sent.When the server contribute a chat message in a certain movie room, IPAddressPresentList is a list of IP address which points to the the users who are online in this certain movie room when the message is going to be sent.
+
+
+2.4 Enter MovieRoom Request/Reply:
+			MovieRoom <CRLF>
+			IPAddress <CRLF>
+			PortNumber <CRLF>
+            	    	Username <CRLF>
+			MovieName <CRLF>
+
+MovieRoom
+
+MovieRoom is the identifer to tell that this message is a message while a client would like to enter the MovieRoom. Defautly, we set the value of MovieRoom as 03 to identify a chatting request. For responses(i.e., messages sent from the serveur to the client), Defautly, we set the value of MovieRoom as 31 to identify an accepted chatting reply and 30 for refusing this chatting reply. 
+
+2.5 List of Client	
+			IPAddress <CRLF>
+			PortNumber <CRLF>
+            	    	Username <CRLF>
+			Userstate <CRLF>
+Userstate
+
+Userstate indique whether a client is online or not. If a client is online, Userstate will be 111, if it is offline, userstate will be 110. The list of client message will be sent to all the clients online when a client logs in or out.  
+
+2.6 List of Movie
+			IPAddress <CRLF>
+			PortNumber <CRLF>
+            	    	Username <CRLF>
+			MovieName <CRLF>
+
+After log in, a server will receive the list of the names of movies. 
+
+
+
+2.7 LogOut Message:  	
+			LOGOUT <CRLF>
+			IP <CRLF>
+			PORT <CRLF>
+            	    	USERNAME <CRLF>
+
+LOGOUT
+
+For requests(i.e., messages sent by a client), this is the identifer to tell that this message is a message of Login. Defautly, we set the value of LOGIN as 0000 to identify a login request. For responses(i;e., messages sent from the serveur to the client),  If this login request is accepted, <Login> in the message sent from the server will be 1111;If it is refused, LogOut will be 0000.
+
+The serveur MUST always reply to a request. Clients MUST send at most one request every second.
+
+
+
+
+
+3.  Reliability
+
+When using UDP, a client MAY resend a request for which it has not yet received a response after a certain time.  In order not to overload servers, clients SHOULD wait at least 2 seconds before
+
+4.  Server Configuration and Multiple Servers
+
+Each server MUST maintain a local data base mapping usernames to IP addresses. If a server finds that a certain username in this local data base is not correspondent to its IP address, it will refuse the request.
+
+
+
+
+5.  Examples
+
+5.1 Example while a client logs in 
+      Suppose a client would like to log in the 'chatwhilewatching' application. It should send the following message to the serveur(recall that CR represents the ASCII character "Carriage Return" (13) and LF represents the ASCII character "Line Feed" (10)):
+	01CRLF
+        192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+If the username is correspondent to the ip address, the server MUST respond with the following message:
+        11CRLF
+	192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+
+If, instead, the request of loging in will be refused, the server MUST respond with the following message:
+	0000CRLF
+	192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+
+5.2 Example while chatting
+At 3.35 pm on March 3rd, 2010, a client sends the following message in the dialog box:"Hey, anybody online?"(recall that CR represents the ASCII character "Carriage Return" (13) and LF represents the ASCII character "Line Feed" (10)):
+        0001CRLF
+        192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+        1267626900: Hey, anybody online?CRLF
+
+The server replies with "":
+	1110CRLF
+        192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+        1267626900: Hey, anybody online?CRLF
+        
+5.3 Example while entering a MovieRoom
+
+Suppose a client would like to choose a movie which is named 'FinalWorld' and enter the interface of MovieRoom. (recall that CR represents the ASCII character "Carriage Return" (13) and LF represents the ASCII character "Line Feed" (10)):
+        0010CRLF
+        192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+	FinalWorldCRLF
+
+The server replies with "" 
+ 	1100CRLF
+        192.168.1.1CRLF
+        2333CRLF
+        albertoCRLF
+	FinalWorldCRLF 
+       
+       
+6.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+
