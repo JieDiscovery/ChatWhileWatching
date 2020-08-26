@@ -13,7 +13,7 @@ This application is derived from a course project of Networking whose purpose wa
 
 
 ### Presentation of C2W protocal specification
-To give a brief introduction of the protocal implemented to this application, you could refer to the ![slides](https://github.com/JieDiscovery/ChatWhileWatching/blob/master/spec/spec-pres-r209-f17-g29.pdf) which present the background and message formats.
+To give a brief introduction of the protocal implemented to this application, you could refer to the [slides](https://github.com/JieDiscovery/ChatWhileWatching/blob/master/spec/spec-pres-r209-f17-g29.pdf) which present the background and message formats.
 
 
 
