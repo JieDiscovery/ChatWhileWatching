@@ -23,9 +23,13 @@ TCP/IP protocol is implemented to data transmission between client and server to
 > @source: [Wikipedia of TCP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol)
 
 ### UDP/IP
+<figure>
+  <img src=".." alt=".." title="Optional title" />
+  <figcaption>Optional title</figcaption>
+</figure>
 
 ![TCP vs UDP](tcp-vs-udp.svg)
-> @source: https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/
+>[image source]("https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/")
 
 > The User Datagram Protocol (UDP) is connectionless. UDP is suitable for purposes where error checking and correction are either not necessary or are performed in the application.
 
