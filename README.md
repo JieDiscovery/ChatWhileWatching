@@ -36,7 +36,7 @@ TCP/IP protocol is implemented to data transmission between client and server to
 ### [Text Version of Protocol specification](spec/protocol-specification.pdf)
 
 ### Presentation of C2W protocol specification
-To give a brief introduction of the protocal implemented to this application, you could refer to the [slides](spec/protocol-specification-presentation.pdf) which present the background and the formats of messages.
+To give a brief introduction of the protocol implemented to this application, you could refer to the [slides](spec/protocol-specification-presentation.pdf) which present the background and the formats of messages.
 
 
 
